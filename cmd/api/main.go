@@ -58,6 +58,9 @@ func main() {
 	checkoutRepo := repository.NewCheckoutRepository(db)
 	checkoutSvc := service.NewCheckoutService(checkoutRepo)
 	checkoutHandler := handler.NewCheckoutHandler(checkoutSvc)
+	cartRepo := repository.NewCartRepository(db)
+	cartSvc := service.NewCartService(cartRepo, checkoutRepo)
+	cartHandler := handler.NewCartHandler(cartSvc)
 
 	e := echo.New()
 
@@ -81,6 +84,10 @@ func main() {
 	api.GET("/checkout", checkoutHandler.GetUserOrders, mockAuthMiddleware)
 
 	api.PUT("/checkout/:id/cancel", checkoutHandler.CancelOrder, mockAuthMiddleware)
+	api.GET("/cart", cartHandler.GetCart, mockAuthMiddleware)
+	api.POST("/cart", cartHandler.AddToCart, mockAuthMiddleware)
+	api.PUT("/cart/:id", cartHandler.UpdateCart, mockAuthMiddleware)
+	api.DELETE("/cart/:id", cartHandler.RemoveCartItem, mockAuthMiddleware)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Server Backend E-Commerce (Golang) jalan!")
