@@ -67,6 +67,9 @@ func main() {
 	addressRepo := repository.NewAddressRepository(db)
 	addressSvc := service.NewAddressService(addressRepo)
 	addressHandler := handler.NewAddressHandler(addressSvc)
+	orderRepo := repository.NewOrderRepository(db)
+	orderSvc := service.NewOrderService(orderRepo)
+	orderHandler := handler.NewOrderHandler(orderSvc)
 
 	e := echo.New()
 
@@ -100,6 +103,8 @@ func main() {
 	api.POST("/addresses", addressHandler.AddAddress, mockAuthMiddleware)
 	api.PUT("/addresses/:id/primary", addressHandler.SetPrimary, mockAuthMiddleware)
 	api.DELETE("/addresses/:id", addressHandler.DeleteAddress, mockAuthMiddleware)
+	api.GET("/orders", orderHandler.GetUserOrders, mockAuthMiddleware)
+	api.GET("/orders/:id", orderHandler.GetOrderDetail, mockAuthMiddleware)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Server Backend E-Commerce (Golang) jalan!")
