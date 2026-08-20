@@ -112,8 +112,8 @@ func main() {
 	api.GET("/orders/:id", orderHandler.GetOrderDetail, mockAuthMiddleware)
 	api.GET("/profile", userHandler.GetProfile, mockAuthMiddleware)
 	api.PUT("/profile", userHandler.UpdateProfile, mockAuthMiddleware)
-	e.POST("/api/auth/register", authHandler.Register)
-	e.POST("/api/auth/login", authHandler.Login)
+	api.POST("/api/auth/register", authHandler.Register)
+	api.POST("/api/auth/login", authHandler.Login)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Server Backend E-Commerce (Golang) jalan!")
